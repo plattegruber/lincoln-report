@@ -14,6 +14,10 @@ importers:
       astro:
         specifier: ^5.15.3
         version: 5.15.3(@types/node@24.9.2)(rollup@4.52.5)(typescript@5.9.3)
+    devDependencies:
+      wrangler:
+        specifier: ^4.41.0
+        version: 4.41.0(@cloudflare/workers-types@4.20251014.0)
 
 packages:
 

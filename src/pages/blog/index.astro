@@ -1,0 +1,149 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+const posts = await getCollection('blog');
+const sorted = posts
+  .filter((post) => !post.data.draft)
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+---
+
+<Layout title="Field Reports — Lincoln Report">
+  <section class="summary">
+    <h1>Field Reports Archive</h1>
+    <p>
+      Indexed transmissions from D.O.T.T.E.’s stay among the citizens of Lincoln, Nebraska. Each log captures an encounter,
+      experiment, or cultural curiosity deemed relevant to the Assimilation Index.
+    </p>
+  </section>
+
+  <ul class="post-list">
+    {sorted.map((post) => {
+      const { title, description, pubDate, tags } = post.data;
+      return (
+        <li>
+          <article>
+            <header>
+              <time datetime={pubDate.toISOString()}>{pubDate.toLocaleDateString('en-US', {
+                month: 'long',
+                day: 'numeric',
+                year: 'numeric',
+              })}</time>
+              <h2><a href={`/blog/${post.slug}/`}>{title}</a></h2>
+            </header>
+            <p>{description}</p>
+            {tags.length > 0 && (
+              <ul class="tag-list">
+                {tags.map((tag) => (
+                  <li>{tag}</li>
+                ))}
+              </ul>
+            )}
+          </article>
+        </li>
+      );
+    })}
+  </ul>
+</Layout>
+
+<style>
+  .summary {
+    display: grid;
+    gap: 1rem;
+    padding: clamp(1.5rem, 3vw, 2.5rem);
+    background: var(--card-bg);
+    border-radius: 1.5rem;
+    border: 1px solid var(--card-border);
+    box-shadow: 0 20px 40px rgba(7, 10, 17, 0.45);
+  }
+
+  .summary h1 {
+    margin: 0;
+    font-size: clamp(2rem, 4vw, 2.6rem);
+  }
+
+  .summary p {
+    margin: 0;
+    color: var(--text-secondary);
+    line-height: 1.65;
+  }
+
+  .post-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: clamp(1.5rem, 3vw, 2.25rem);
+  }
+
+  .post-list li {
+    margin: 0;
+  }
+
+  article {
+    display: grid;
+    gap: 0.75rem;
+    padding: 1.75rem;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 1.25rem;
+    transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  article:hover,
+  article:focus-within {
+    border-color: var(--accent);
+    transform: translateY(-3px);
+    box-shadow: 0 16px 32px rgba(7, 10, 17, 0.35);
+  }
+
+  header time {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+  }
+
+  header h2 {
+    margin: 0.35rem 0 0;
+    font-size: 1.5rem;
+    line-height: 1.3;
+  }
+
+  header a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  header a:hover,
+  header a:focus-visible {
+    text-decoration: underline;
+  }
+
+  article p {
+    margin: 0;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  .tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .tag-list li {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.3rem 0.65rem;
+    border-radius: 999px;
+    background: var(--accent-soft);
+    color: var(--accent);
+  }
+</style>

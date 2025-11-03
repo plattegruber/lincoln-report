@@ -1,11 +1,217 @@
 ---
-import Welcome from '../components/Welcome.astro';
 import Layout from '../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+const posts = await getCollection('blog');
+const sorted = posts
+  .filter((post) => !post.data.draft)
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 ---
 
 <Layout>
-	<Welcome />
+  <section class="intro">
+    <p class="eyebrow">Field Log // Arrival</p>
+    <h1 class="headline">Lincoln, Nebraska observed by Designation Observer: Type-Three Entity</h1>
+    <article class="entry">
+      <h2>Log 001</h2>
+      <p>
+        I have arrived in Lincoln, Nebraska, a mid-sized terrestrial cluster notable for its dedication to football and breakfast
+        burritos. The inhabitants are pleasant, if bewildered by the presence of my diplomatic shimmer. One small human called me
+        “kinda vibey,” which I have logged as an early success in assimilation.
+      </p>
+      <p>
+        The environment appears breathable, though the ratio of wind to hair stability remains unfavourable. A local advised me to
+        “hold onto my hat.” I do not own a hat, and, by the end of the interaction, neither did he.
+      </p>
+    </article>
+  </section>
+
+  <section class="feed">
+    <div class="feed-heading">
+      <h2>Recent Field Reports</h2>
+      <a class="more-link" href="/blog">View all logs →</a>
+    </div>
+    <ul class="log-grid">
+      {sorted.map((post) => {
+        const { title, description, pubDate, tags } = post.data;
+        return (
+          <li class="log-card">
+            <a href={`/blog/${post.slug}/`}>
+              <time datetime={pubDate.toISOString()}>{pubDate.toLocaleDateString('en-US', {
+                month: 'short',
+                day: 'numeric',
+                year: 'numeric',
+              })}</time>
+              <h3>{title}</h3>
+              <p>{description}</p>
+              {tags.length > 0 && (
+                <ul class="tag-list">
+                  {tags.map((tag) => (
+                    <li>{tag}</li>
+                  ))}
+                </ul>
+              )}
+            </a>
+          </li>
+        );
+      })}
+    </ul>
+  </section>
 </Layout>
+
+<style>
+  .intro {
+    display: grid;
+    gap: 1.5rem;
+    padding: clamp(1.5rem, 3vw, 2.5rem);
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 1.5rem;
+    box-shadow: 0 25px 55px rgba(7, 10, 17, 0.5);
+  }
+
+  .eyebrow {
+    margin: 0;
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.25em;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .headline {
+    font-size: clamp(1.8rem, 4vw, 2.6rem);
+    margin: 0;
+    line-height: 1.2;
+  }
+
+  .entry {
+    margin: 0;
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .entry h2 {
+    margin: 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--text-secondary);
+  }
+
+  .entry p {
+    margin: 0;
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: var(--text-secondary);
+  }
+
+  .feed {
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  .feed-heading {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .feed-heading h2 {
+    margin: 0;
+    font-size: 1.45rem;
+  }
+
+  .more-link {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  .more-link:hover,
+  .more-link:focus-visible {
+    text-decoration: underline;
+  }
+
+  .log-grid {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: clamp(1.25rem, 3vw, 2rem);
+    padding: 0;
+    margin: 0;
+  }
+
+  .log-card {
+    margin: 0;
+  }
+
+  .log-card a {
+    display: grid;
+    gap: 0.75rem;
+    padding: 1.5rem;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 1.25rem;
+    color: inherit;
+    text-decoration: none;
+    height: 100%;
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .log-card a:hover,
+  .log-card a:focus-visible {
+    transform: translateY(-4px);
+    border-color: var(--accent);
+    box-shadow: 0 18px 38px rgba(7, 10, 17, 0.45);
+  }
+
+  .log-card time {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+  }
+
+  .log-card h3 {
+    margin: 0;
+    font-size: 1.2rem;
+  }
+
+  .log-card p {
+    margin: 0;
+    color: var(--text-secondary);
+    line-height: 1.55;
+  }
+
+  .tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+
+  .tag-list li {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.3rem 0.6rem;
+    border-radius: 999px;
+    background: var(--accent-soft);
+    color: var(--accent);
+  }
+
+  @media (max-width: 600px) {
+    .feed-heading {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+</style>

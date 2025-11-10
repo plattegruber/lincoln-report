@@ -9,6 +9,10 @@ Install dependencies with `pnpm install` (pnpm is required because of the lockfi
 ## Coding Style & Naming Conventions
 Follow Astro defaults: two-space indentation, ES module syntax, and descriptive component names (`HeroBanner.astro`, `post-title.md`). Keep Markdown frontmatter minimal and typed via collection schemas, and colocate page-specific styles within the same `.astro` file. Prefer named exports for utilities and avoid implicit globals; when adding scripts, opt into TypeScript for static guarantees.
 
+### Framework Constraints
+- Keep UI layers framework-free inside Astro—do **not** embed React components or islands. When adapting third-party React themes, reimplement the markup and interactions with native Astro + vanilla JS instead of pulling React into the project.
+- Favor Tailwind utility classes for component styling. Only fall back to bespoke CSS when Tailwind cannot express the requirement, and keep those cases isolated.
+
 ## Testing Guidelines
 Automated testing is not yet configured, so rely on `pnpm astro check` and a full `pnpm build && pnpm preview` run before raising a pull request. Validate Cloudflare-specific behaviour with `wrangler dev` if your change touches edge APIs, and capture console output or screenshots for UI regressions. When adding tests in the future, mirror the `src/` tree and use descriptive filenames (`about.test.ts`) beside the code under test.
 

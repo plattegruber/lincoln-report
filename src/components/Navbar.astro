@@ -1,0 +1,162 @@
+---
+const links = [
+  { href: '/', label: 'Home' },
+  { href: '/blog', label: 'Field Reports' },
+];
+
+const { banner = null } = Astro.props;
+const hasBannerSlot = Astro.slots.has('banner');
+const showBanner = Boolean(banner) || hasBannerSlot;
+
+const uid = Math.random().toString(36).slice(2, 8);
+const rootId = `navbar-${uid}`;
+const panelId = `${rootId}-panel`;
+const toggleId = `${rootId}-toggle`;
+---
+
+<header class="pt-12 sm:pt-16" data-navbar-id={rootId}>
+  <div class="group/row relative isolate py-[9px]">
+    <div aria-hidden="true" class="absolute inset-y-0 left-1/2 -z-10 w-screen -translate-x-1/2">
+      <div class="absolute inset-x-0 top-0 border-t border-white/15"></div>
+      <div class="absolute inset-x-0 top-2 border-t border-white/15"></div>
+      <div class="absolute inset-x-0 bottom-0 border-b border-white/15"></div>
+      <div class="absolute inset-x-0 bottom-2 border-b border-white/15"></div>
+    </div>
+    <div class="relative flex w-full flex-wrap items-center justify-between gap-6">
+      <div class="relative flex flex-1 items-center gap-6">
+        <div class="group/item relative flex items-center py-0">
+          <svg
+            viewBox="0 0 15 15"
+            aria-hidden="true"
+            class="absolute -top-2 -left-2 hidden size-[15px] fill-white/20 group-first/item:block"
+          >
+            <path d="M8 0H7V7H0V8H7V15H8V8H15V7H8V0Z" />
+          </svg>
+          <svg viewBox="0 0 15 15" aria-hidden="true" class="absolute -top-2 -right-2 size-[15px] fill-white/20">
+            <path d="M8 0H7V7H0V8H7V15H8V8H15V7H8V0Z" />
+          </svg>
+          <svg
+            viewBox="0 0 15 15"
+            aria-hidden="true"
+            class="absolute -bottom-2 -left-2 hidden size-[15px] fill-white/20 group-first/item:block"
+          >
+            <path d="M8 0H7V7H0V8H7V15H8V8H15V7H8V0Z" />
+          </svg>
+          <svg viewBox="0 0 15 15" aria-hidden="true" class="absolute -bottom-2 -right-2 size-[15px] fill-white/20">
+            <path d="M8 0H7V7H0V8H7V15H8V8H15V7H8V0Z" />
+          </svg>
+          <a href="/" title="Home" class="flex items-center gap-3">
+            <span class="flex size-12 items-center justify-center rounded-full bg-white/10 font-semibold text-sky-300">
+              ✶
+            </span>
+            <span class="text-sm font-semibold uppercase tracking-[0.4em] text-white">Lincoln Report</span>
+          </a>
+        </div>
+        {showBanner && (
+          <div class="relative hidden items-center py-3 lg:flex">
+            {banner ?? <slot name="banner" />}
+          </div>
+        )}
+      </div>
+      <nav class="relative hidden items-center lg:flex">
+        {links.map(({ href, label }) => (
+          <div class="group/item relative flex">
+            <svg
+              viewBox="0 0 15 15"
+              aria-hidden="true"
+              class="absolute -top-2 -left-2 hidden size-[15px] fill-white/20 group-first/item:block"
+            >
+              <path d="M8 0H7V7H0V8H7V15H8V8H15V7H8V0Z" />
+            </svg>
+            <svg viewBox="0 0 15 15" aria-hidden="true" class="absolute -top-2 -right-2 size-[15px] fill-white/20">
+              <path d="M8 0H7V7H0V8H7V15H8V8H15V7H8V0Z" />
+            </svg>
+            <svg
+              viewBox="0 0 15 15"
+              aria-hidden="true"
+              class="absolute -bottom-2 -left-2 hidden size-[15px] fill-white/20 group-first/item:block"
+            >
+              <path d="M8 0H7V7H0V8H7V15H8V8H15V7H8V0Z" />
+            </svg>
+            <svg viewBox="0 0 15 15" aria-hidden="true" class="absolute -bottom-2 -right-2 size-[15px] fill-white/20">
+              <path d="M8 0H7V7H0V8H7V15H8V8H15V7H8V0Z" />
+            </svg>
+            <a
+              href={href}
+              class="flex items-center px-4 py-3 text-base font-medium text-white bg-blend-multiply transition hover:bg-white/10"
+            >
+              {label}
+            </a>
+          </div>
+        ))}
+      </nav>
+      <button
+        id={toggleId}
+        type="button"
+        class="flex size-12 items-center justify-center self-center rounded-lg hover:bg-white/10 lg:hidden"
+        aria-label="Toggle main menu"
+        aria-controls={panelId}
+        aria-expanded="false"
+        data-nav-toggle
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true" class="size-6 text-white">
+          <path d="M4 7.5C4 7.22386 4.22386 7 4.5 7H19.5C19.7761 7 20 7.22386 20 7.5C20 7.77614 19.7761 8 19.5 8H4.5C4.22386 8 4 7.77614 4 7.5Z" />
+          <path d="M4 12.5C4 12.2239 4.22386 12 4.5 12H19.5C19.7761 12 20 12.2239 20 12.5C20 12.7761 19.7761 13 19.5 13H4.5C4.22386 13 4 12.7761 4 12.5Z" />
+          <path d="M4.5 17C4.22386 17 4 17.2239 4 17.5C4 17.7761 4.22386 18 4.5 18H19.5C19.7761 18 20 17.7761 20 17.5C20 17.2239 19.7761 17 19.5 17H4.5Z" />
+        </svg>
+      </button>
+    </div>
+  </div>
+  <div id={panelId} class="relative lg:hidden" data-mobile-nav hidden>
+    <div class="flex flex-col gap-6 py-4">
+      {links.map(({ href, label }) => (
+        <a href={href} class="text-base font-medium text-white" data-nav-link>
+          {label}
+        </a>
+      ))}
+    </div>
+    <div class="absolute left-1/2 w-screen -translate-x-1/2">
+      <div class="absolute inset-x-0 top-0 border-t border-white/15"></div>
+      <div class="absolute inset-x-0 top-2 border-t border-white/15"></div>
+    </div>
+  </div>
+</header>
+
+<script is:inline>
+  const script = document.currentScript;
+  const root = script?.closest('[data-navbar-id]');
+  if (!root) return;
+
+  const toggle = root.querySelector('[data-nav-toggle]');
+  const panel = root.querySelector('[data-mobile-nav]');
+  const links = panel ? Array.from(panel.querySelectorAll('[data-nav-link]')) : [];
+
+  const setOpen = (open) => {
+    if (!toggle || !panel) return;
+    toggle.setAttribute('aria-expanded', String(open));
+    panel.toggleAttribute('hidden', !open);
+  };
+
+  toggle?.addEventListener('click', () => {
+    const isOpen = toggle.getAttribute('aria-expanded') === 'true';
+    setOpen(!isOpen);
+  });
+
+  links.forEach((link) =>
+    link.addEventListener('click', () => {
+      setOpen(false);
+    }),
+  );
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') {
+      setOpen(false);
+    }
+  });
+
+  document.addEventListener('click', (event) => {
+    if (!root.contains(event.target)) {
+      setOpen(false);
+    }
+  });
+</script>

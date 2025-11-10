@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import Navbar from '../components/Navbar.astro';
 
 const {
   title = 'Lincoln Report — D.O.T.T.E. Field Notes',
@@ -31,16 +32,7 @@ const {
   </head>
   <body>
     <div class="background-glow" aria-hidden="true"></div>
-    <header class="site-header">
-      <a class="logo" href="/">
-        <span aria-hidden="true">✶</span>
-        <span class="wordmark">Lincoln Report</span>
-      </a>
-      <nav class="site-nav">
-        <a href="/">Home</a>
-        <a href="/blog">Field Reports</a>
-      </nav>
-    </header>
+    <Navbar />
     <main class="site-main">
       <slot />
     </main>
@@ -90,59 +82,6 @@ const {
     z-index: -2;
   }
 
-  .site-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: clamp(1.5rem, 4vw, 3rem) 0;
-    gap: 2rem;
-  }
-
-  .logo {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.75rem;
-    font-weight: 700;
-    font-size: clamp(1.25rem, 2vw, 1.65rem);
-    letter-spacing: 0.08em;
-    color: var(--text-primary);
-    text-decoration: none;
-  }
-
-  .logo span[aria-hidden="true"] {
-    display: inline-flex;
-    width: 2rem;
-    height: 2rem;
-    border-radius: 999px;
-    align-items: center;
-    justify-content: center;
-    background: var(--accent-soft);
-    color: var(--accent);
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 1.1rem;
-  }
-
-  .site-nav {
-    display: inline-flex;
-    gap: 1.25rem;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.95rem;
-  }
-
-  .site-nav a {
-    color: var(--text-secondary);
-    text-decoration: none;
-    padding-bottom: 0.2rem;
-    border-bottom: 1px solid transparent;
-    transition: color 0.2s ease, border-color 0.2s ease;
-  }
-
-  .site-nav a:hover,
-  .site-nav a:focus-visible {
-    color: var(--text-primary);
-    border-color: var(--accent);
-  }
-
   .site-main {
     max-width: 900px;
     margin: 0 auto;
@@ -163,15 +102,6 @@ const {
   @media (max-width: 640px) {
     body {
       padding-inline: 1.25rem;
-    }
-
-    .site-header {
-      flex-direction: column;
-      align-items: flex-start;
-    }
-
-    .site-nav {
-      flex-wrap: wrap;
     }
   }
 </style>

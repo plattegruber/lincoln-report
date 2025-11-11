@@ -6,6 +6,30 @@ tags:
   - lincoln
   - gas-station
   - field-log
+transmission:
+  heading: "Uplink: D.O.T.T.E. ⇄ Mothership"
+  subheading: "Channel 07-AQ routed through the Lincoln field office."
+  messages:
+    - speaker: "Mothership"
+      content: "Secure connection established. Reviewing field logs now. Designation Observer: Type Three Entity, we are missing logs containing information about the meal itself. We are investigating this glitch now. In the meantime—what can you report?"
+    - speaker: "D.O.T.T.E."
+      content: "No glitch. The sustenance the humans prepare at this establishment caught me off guard. The humble facade did not prepare me for how delicious the meal would be. I simply forgot to record logs while I consumed the meal."
+    - speaker: "Mothership"
+      content: "Message received. Are we safe to assume we can add this to our \"Consider Not Destroying\" list?"
+    - speaker: "D.O.T.T.E."
+      content: "Confirmed. Please spare this one."
+    - speaker: "Mothership"
+      content: "Confirmed. Captain Nom expresses his intent to dine there tomorrow on your recommendation."
+    - speaker: "D.O.T.T.E."
+      content: "Confusingly, the humans only open this establishment every seven days."
+    - speaker: "Mothership"
+      content: "*bangs* *crashes*... *static*..................."
+    - speaker: "D.O.T.T.E."
+      content: "..."
+    - speaker: "Mothership"
+      content: "*static*.... *ahem* the captain is not pleased to hear that report!"
+    - speaker: "D.O.T.T.E."
+      content: "I share the captain's sentiment!"
 ---
 
 ## Field Log: Biji's Best Convenience and Refueling
@@ -24,27 +48,9 @@ tags:
 
 **06:10:10 Zlorp Time** — Oh wow. Woah.
 
-**06:28:58 Zlorp Time** — My mouth wants more but my belly cannot. I must recline. Reporting to Mothership.
+**06:28:58 Zlorp Time** — My mouth wants more but my belly cannot. I must recline. Reporting to Mothership. Encrypted transcript follows.
 
-> **Mothership**: Secure connection established. Reviewing field logs now. Designation Observer: Type Three Entity, we are missing logs containing information about the meal itself. We are investigating this glitch now. In the meantime—what can you report?
->
-> **D.O.T.T.E.**: No glitch. The sustenance the humans prepare at this establishment caught me off guard. The humble facade did not prepare me for how delicious the meal would be. I simply forgot to record logs while I consumed the meal.
->
-> **Mothership**: Message received. Are we safe to assume we can add this to our "Consider Not Destroying" list?
->
-> **D.O.T.T.E.**: Confirmed. Please spare this one.
->
-> **Mothership**: Confirmed. Captain Nom expresses his intent to dine there tomorrow on your recommendation.
->
-> **D.O.T.T.E.**: Confusingly, the humans only open this establishment every seven days.
->
-> **Mothership**: *bangs* *crashes*... *static*...................
->
-> **D.O.T.T.E.**: ...
->
-> **Mothership**: *static*.... *ahem* the captain is not pleased to hear that report!
->
-> **D.O.T.T.E.**: I share the captain's sentiment!
+<!-- transmission-link -->
 
 ## Final Report
 

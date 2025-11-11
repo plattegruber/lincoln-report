@@ -1,6 +1,11 @@
 ---
+import type { ImageMetadata } from 'astro';
 import Layout from '../../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
+import TransmissionLink from '../../components/TransmissionLink.astro';
+import TransmissionMessage from '../../components/TransmissionMessage.astro';
+import dottePortrait from '../../images/dotte.png';
+import mothershipPortrait from '../../images/mothership.png';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog');
@@ -13,8 +18,94 @@ export async function getStaticPaths() {
 }
 
 const { post } = Astro.props;
-const { title, description, pubDate, tags } = post.data;
+const { title, description, pubDate, tags, transmission } = post.data;
 const { Content } = await post.render();
+
+const placeholder = '<!-- transmission-link -->';
+const hasTransmission = Boolean(transmission && post.body.includes(placeholder));
+let introSegment = post.body;
+let outroSegment = '';
+
+if (hasTransmission) {
+  const [before = '', after = ''] = post.body.split(placeholder);
+  introSegment = before;
+  outroSegment = after;
+}
+
+const escapeHtml = (value: string) =>
+  value
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+
+const formatInline = (value: string) =>
+  escapeHtml(value)
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g, '<em>$1</em>');
+
+const segmentToHtml = (segment: string | undefined) => {
+  if (!segment) return '';
+  const lines = segment.split('\n');
+  const blocks: string[] = [];
+  let buffer: string[] = [];
+
+  const flushParagraph = () => {
+    if (buffer.length === 0) return;
+    const text = buffer.join(' ').trim();
+    if (text) {
+      blocks.push(`<p>${formatInline(text)}</p>`);
+    }
+    buffer = [];
+  };
+
+  for (const line of lines) {
+    const trimmed = line.trim();
+    if (!trimmed) {
+      flushParagraph();
+      continue;
+    }
+    if (trimmed.startsWith('## ')) {
+      flushParagraph();
+      blocks.push(`<h2>${formatInline(trimmed.slice(3).trim())}</h2>`);
+      continue;
+    }
+    buffer.push(trimmed);
+  }
+
+  flushParagraph();
+  return blocks.join('\n');
+};
+
+const firstSegmentHtml = hasTransmission ? segmentToHtml(introSegment) : '';
+const secondSegmentHtml = hasTransmission ? segmentToHtml(outroSegment) : '';
+
+const resolveImageSrc = (image: string | ImageMetadata) =>
+  typeof image === 'string' ? image : image.src;
+
+const transmissionLinkConfig = transmission
+  ? {
+      heading: transmission.heading,
+      subheading: transmission.subheading,
+      leftAgent: {
+        name: 'D.O.T.T.E.',
+        role: 'Field Observer',
+        image: resolveImageSrc(dottePortrait),
+        sizeClass: 'size-24',
+      },
+      rightAgent: {
+        name: 'Mothership',
+        role: 'Command Relay',
+        image: resolveImageSrc(mothershipPortrait),
+        sizeClass: 'size-24',
+      },
+    }
+  : null;
+
+const transmissionMessages =
+  transmission?.messages.map((message) => ({
+    speaker: message.speaker,
+    content: formatInline(message.content.trim()),
+  })) ?? [];
 ---
 
 <Layout title={`${title} — Lincoln Report`} description={description}>
@@ -36,7 +127,24 @@ const { Content } = await post.render();
       )}
     </header>
     <div class="body">
-      <Content />
+      {hasTransmission && transmissionLinkConfig ? (
+        <div class="transmission-stack">
+          {firstSegmentHtml && <div set:html={firstSegmentHtml}></div>}
+          <TransmissionLink
+            heading={transmissionLinkConfig.heading}
+            subheading={transmissionLinkConfig.subheading}
+            leftAgent={transmissionLinkConfig.leftAgent}
+            rightAgent={transmissionLinkConfig.rightAgent}
+          >
+            {transmissionMessages.map((message) => (
+              <TransmissionMessage speaker={message.speaker} content={message.content} />
+            ))}
+          </TransmissionLink>
+          {secondSegmentHtml && <div set:html={secondSegmentHtml}></div>}
+        </div>
+      ) : (
+        <Content />
+      )}
     </div>
     <footer class="post-footer">
       <a class="back" href="/blog">← Back to field reports</a>
@@ -109,6 +217,11 @@ const { Content } = await post.render();
     font-size: 1.05rem;
     line-height: 1.8;
     color: var(--text-secondary);
+  }
+
+  .transmission-stack {
+    display: grid;
+    gap: 1.5rem;
   }
 
   .body :global(p) {

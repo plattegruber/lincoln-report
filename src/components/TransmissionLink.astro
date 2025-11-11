@@ -1,0 +1,84 @@
+---
+import type { ImageMetadata } from 'astro';
+import AgentAvatar from './AgentAvatar.astro';
+import PulsingRings from './PulsingRings.astro';
+
+interface AgentProfile {
+  name: string;
+  role?: string;
+  image: string | ImageMetadata;
+  align?: 'start' | 'center' | 'end';
+  sizeClass?: string;
+}
+
+interface TransmissionLinkProps {
+  heading?: string;
+  subheading?: string;
+  leftAgent: AgentProfile;
+  rightAgent: AgentProfile;
+}
+
+const {
+  heading = 'Encrypted uplink established',
+  subheading = 'Telemetry thread synchronized across the relay network.',
+  leftAgent,
+  rightAgent,
+} = Astro.props as TransmissionLinkProps;
+---
+
+<section class="relative overflow-hidden rounded-[1.5rem] border border-white/25 bg-[radial-gradient(circle_at_8%_5%,rgba(59,130,246,0.14),rgba(2,6,23,0.95))] p-6 text-white shadow-[0_25px_80px_rgba(2,6,23,0.55)] sm:p-10">
+  <header class="relative z-10 space-y-2 text-center">
+    <p class="text-xs font-mono uppercase tracking-[0.5em] text-cyan-300">Subspace Channel</p>
+    <h2 class="text-2xl font-semibold">{heading}</h2>
+    <p class="text-base text-white/70">{subheading}</p>
+  </header>
+
+  <div class="relative mt-9 overflow-hidden rounded-[1.1rem] px-4 py-16 sm:px-10 sm:py-20">
+    <PulsingRings className="absolute inset-0 opacity-80" />
+    <div
+      class="pointer-events-none absolute left-[clamp(3rem,10vw,9rem)] right-[clamp(3rem,10vw,9rem)] top-1/2 h-[2px] -translate-y-1/2 bg-[linear-gradient(90deg,rgba(125,211,252,0.2),rgba(94,234,212,0.7),rgba(250,204,21,0.35))]"
+      aria-hidden="true"
+    ></div>
+
+    <div class="relative z-10 grid items-center gap-10 md:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)]">
+      <div class="flex justify-center">
+        <AgentAvatar
+          image={leftAgent.image}
+          name={leftAgent.name}
+          role={leftAgent.role}
+          align="center"
+          sizeClass={leftAgent.sizeClass}
+        />
+      </div>
+
+      <div class="flex items-center justify-center">
+        <div class="flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-emerald-400 to-emerald-600 text-emerald-950 shadow-[0_0_30px_rgba(34,197,94,0.5)]">
+          <svg viewBox="0 0 20 20" aria-hidden="true" class="h-6 w-6">
+            <path
+              d="M5 10.5l2.8 2.8 7-7"
+              fill="none"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+            />
+          </svg>
+        </div>
+      </div>
+
+      <div class="flex justify-center">
+        <AgentAvatar
+          image={rightAgent.image}
+          name={rightAgent.name}
+          role={rightAgent.role}
+          align="center"
+          sizeClass={rightAgent.sizeClass}
+        />
+      </div>
+    </div>
+  </div>
+
+  <div class="relative z-10 mt-8 grid gap-3">
+    <slot />
+  </div>
+</section>

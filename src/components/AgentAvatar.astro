@@ -1,0 +1,48 @@
+---
+import type { ImageMetadata } from 'astro';
+
+interface AgentAvatarProps {
+  image: string | ImageMetadata;
+  name: string;
+  role?: string;
+  align?: 'start' | 'center' | 'end';
+  sizeClass?: string;
+}
+
+const {
+  image,
+  name,
+  role,
+  align = 'center',
+  sizeClass = 'size-20',
+} = Astro.props as AgentAvatarProps;
+
+const avatarSrc = typeof image === 'string' ? image : image.src;
+
+const alignment =
+  align === 'start'
+    ? 'items-start text-left'
+    : align === 'end'
+      ? 'items-end text-right'
+      : 'items-center text-center';
+---
+
+<div class={`flex flex-col gap-4 text-white ${alignment}`}>
+  <div class="relative flex items-center justify-center">
+    <span class="sr-only">{name}</span>
+    <img
+      src={avatarSrc}
+      alt={name}
+      loading="lazy"
+      decoding="async"
+      class={`inline-block ${sizeClass} rounded-full bg-gradient-to-br from-white/20 via-white/5 to-transparent object-cover outline outline-2 -outline-offset-2 outline-black/5 dark:outline-white/15`}
+    />
+    <span class="pointer-events-none absolute -bottom-3 left-1/2 -translate-x-1/2 rounded-full bg-emerald-500/90 px-2 py-0.5 text-xs font-semibold uppercase tracking-[0.2em] text-emerald-950 shadow-lg">
+      link
+    </span>
+  </div>
+  <div class="space-y-1 text-sm">
+    <p class="font-semibold tracking-wide text-white">{name}</p>
+    {role && <p class="font-mono text-xs uppercase tracking-[0.3em] text-white/70">{role}</p>}
+  </div>
+</div>

@@ -1,4 +1,6 @@
 ---
+import patchLogo from '../images/patch_logo.png';
+
 const links = [
   { href: '/', label: 'Home' },
   { href: '/blog', label: 'Field Reports' },
@@ -45,11 +47,16 @@ const toggleId = `${rootId}-toggle`;
           <svg viewBox="0 0 15 15" aria-hidden="true" class="absolute -bottom-2 -right-2 size-[15px] fill-white/20">
             <path d="M8 0H7V7H0V8H7V15H8V8H15V7H8V0Z" />
           </svg>
-          <a href="/" title="Home" class="flex items-center gap-3">
-            <span class="flex size-12 items-center justify-center rounded-full bg-white/10 font-semibold text-sky-300">
-              ✶
-            </span>
-            <span class="text-sm font-semibold uppercase tracking-[0.4em] text-white">Lincoln Report</span>
+          <a href="/" title="Home" class="block">
+            <img
+              src={patchLogo.src}
+              width={patchLogo.width}
+              height={patchLogo.height}
+              alt="Lincoln Report patch logo"
+              loading="eager"
+              decoding="async"
+              class="h-12 w-auto"
+            />
           </a>
         </div>
         {showBanner && (
